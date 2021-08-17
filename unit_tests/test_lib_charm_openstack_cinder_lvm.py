@@ -230,7 +230,6 @@ class TestCinderLVMCharm(test_utils.PatchHelper):
         self.LVM.add_device(loop_dev, loop=True)
         charm = self._patch_config_and_charm(
             {'block-device': loop_dev + '|100'})
-
         charm.cinder_configuration()
         dev = self.LVM.find_device(loop_dev)
         self.assertTrue(dev)
