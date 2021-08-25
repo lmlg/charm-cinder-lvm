@@ -302,7 +302,7 @@ def clean_storage(block_device):
     if is_lvm_physical_volume(block_device):
         deactivate_lvm_volume_group(block_device)
         subprocess.Popen(['pvremove', '-ff', block_device],
-            stdin=subprocess.PIPE).communicate(b'y\n')
+                         stdin=subprocess.PIPE).communicate(b'y\n')
 
     zap_disk(block_device)
 
