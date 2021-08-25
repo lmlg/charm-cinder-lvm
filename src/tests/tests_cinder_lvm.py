@@ -27,16 +27,19 @@ import zaza.openstack.utilities.openstack as openstack_utils
 def with_conf(key, value):
     def patched(f):
         def inner(*args, **kwargs):
-            prev = openstack_utils.get_application_config_option('cinder-lvm', key)
+            prev = openstack_utils.get_application_config_option(
+                'cinder-lvm', key)
             try:
                 zaza.model.set_application_config('cinder-lvm', {key: value})
                 zaza.model.wait_for_agent_status(model_name=None)
                 return f(*args, **kwargs)
             finally:
-                zaza.model.set_application_config('cinder-lvm', {key: str(prev)})
+                zaza.model.set_application_config(
+                    'cinder-lvm', {key: str(prev)})
                 zaza.model.wait_for_agent_status(model_name=None)
         return inner
     return patched
+
 
 class CinderLVMTest(test_utils.OpenStackBaseTest):
     """Encapsulate cinder-lvm tests."""
@@ -64,12 +67,12 @@ class CinderLVMTest(test_utils.OpenStackBaseTest):
         logging.info('cinder-lvm')
         expected_contents = {
             'LVM-zaza-lvm': {
-              'volume_clear': ['zero'],
-              'volumes_dir': ['/var/lib/cinder/volumes'],
-              'volume_name_template': ['volume-%s'],
-              'volume_clear_size': ['0'],
-              'volume_driver': ['cinder.volume.drivers.lvm.LVMVolumeDriver'],
-              } }
+                'volume_clear': ['zero'],
+                'volumes_dir': ['/var/lib/cinder/volumes'],
+                'volume_name_template': ['volume-%s'],
+                'volume_clear_size': ['0'],
+                'volume_driver': ['cinder.volume.drivers.lvm.LVMVolumeDriver'],
+            }}
 
         zaza.model.run_on_leader(
             'cinder',
